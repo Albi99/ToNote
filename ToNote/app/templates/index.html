@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <br>
+    <h1 class="display-4">ToNote</h1>
+</div>
+
+<div class="row">
+    <!-- Sezione Note -->
+    <div class="col-md-6">
+        <h2>Notes</h2>
+        <form method="POST" action="{{ url_for('main.add_note') }}" class="input-group mb-3">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="text" name="content" class="form-control" placeholder="Type a new note" required>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+        <ul class="list-group">
+            {% for note in notes %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ note.content }}
+                    <div>
+                        <a href="{{ url_for('main.edit_note', note_id=note.id) }}" class="btn btn-warning btn-sm me-2">
+                            <i class="bi bi-pencil sf-2"></i>
+                        </a>
+                        <form method="POST" action="{{ url_for('main.delete_note', note_id=note.id) }}" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                            <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash sf-2"></i></button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Sezione To-Do List -->
+    <div class="col-md-6">
+        <h2>Tasks</h2>
+        <form method="POST" action="{{ url_for('main.add_todo') }}" class="input-group mb-3">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="text" name="task" class="form-control" placeholder="Type a new task" required>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+        <ul class="list-group">
+            {% for todo in todos %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <form method="POST" action="{{ url_for('main.toggle_todo', todo_id=todo.id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                        <input type="checkbox" name="is_done" onchange="this.form.submit()" {% if todo.is_done %}checked{% endif %} />
+                        <span class="task-text">
+                            {{ todo.task }}
+                        </span>
+                    </form>
+                    <span class="badge {% if todo.is_done %}bg-success{% else %}bg-warning{% endif %}">
+                        {% if todo.is_done %}Done{% else %}Pending{% endif %}
+                    </span>
+                    <div>
+                        <form method="POST" action="{{ url_for('main.delete_todo', todo_id=todo.id) }}" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                            <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash sf-2"></i></button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

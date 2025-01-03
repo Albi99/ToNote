@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Edit Note</h1>
+    <form method="POST" action="{{ url_for('main.edit_note', note_id=note.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="mb-3">
+            <label for="content" class="form-label">Note Content</label>
+            <textarea id="content" name="content" class="form-control" rows="3">{{ note.content }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
