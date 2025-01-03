@@ -231,10 +231,10 @@ Le viste sono definite nei file HTML nella directory `templates/`. Utilizzano il
 ## **Screenshot**
 
 - **Homepage**:
-    ![Homepage](https://via.placeholder.com/800x400?text=Screenshot+Homepage)
+    ![Homepage]([https://via.placeholder.com/800x400](https://github.com/Albi99/ToNote/blob/main/screenshots/Homepage.png)?text=Screenshot+Homepage)
 
 - **Edit Note**:
-    ![Modifica nota](https://via.placeholder.com/800x400?text=Screenshot+Edit+Note)
+    ![Modifica nota]([https://via.placeholder.com/800x400](https://github.com/Albi99/ToNote/blob/main/screenshots/Edit%20Note.png)?text=Screenshot+Edit+Note)
 
 ---
 
