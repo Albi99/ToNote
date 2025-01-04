@@ -199,7 +199,7 @@ Le viste sono definite nei file HTML nella directory `templates/`. Utilizzano il
 1. **Clona il repository**:
     ```bash
     git clone https://github.com/Albi99/ToNote.git
-    cd ToNote
+    cd ToNote/ToNote
     ```
 
 2. **Installa le dipendenze**:
