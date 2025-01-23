@@ -7,7 +7,7 @@ Questa applicazione è una semplice **web app** costruita con **Flask**, che imp
 
 ### **Caratteristiche principali**
 - Architettura MVC ben definita per separare la logica di business, la presentazione e il controllo.
-- Integrazione con un database SQLite per memorizzare note e task.
+- Integrazione con un database SQLite, che sfrutta ORM.
 - Utilizzo di **Bootstrap** per un design responsive e user-friendly.
 - Protezione contro attacchi CSRF con **Flask-WTF**.
 - Interfaccia dinamica per aggiornare lo stato dei task.
@@ -43,6 +43,8 @@ ToNote/
 ### **1. Modello (Model)**
 
 Il file `models.py` definisce la struttura dei dati per **Note** e **Task**, utilizzando **SQLAlchemy**, inoltre si occupa della persistenza e della logica di business.
+
+La definizione della struttura dei dati e le operazioni CRUD sono eseguite grazie a ORM.
 
 Esempio con gli oggetti di tipo **Note**:
 
