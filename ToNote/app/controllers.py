@@ -19,11 +19,6 @@ def add_note():
     models.Note.add(content)
     return redirect(url_for('main.index'))
 
-@main_blueprint.route('/delete_note/<int:note_id>', methods=['POST'])
-def delete_note(note_id):
-    models.Note.delete(note_id)
-    return redirect(url_for('main.index'))
-
 @main_blueprint.route('/edit_note/<int:note_id>', methods=['GET', 'POST'])
 def edit_note(note_id):
     note = models.Note.get(note_id)
@@ -34,6 +29,11 @@ def edit_note(note_id):
             models.Note.edit(note, new_content)
             return redirect(url_for('main.index'))
     return render_template('edit_note.html', note=note)
+
+@main_blueprint.route('/delete_note/<int:note_id>', methods=['POST'])
+def delete_note(note_id):
+    models.Note.delete(note_id)
+    return redirect(url_for('main.index'))
 
 
 

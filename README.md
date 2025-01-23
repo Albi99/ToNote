@@ -42,36 +42,53 @@ ToNote/
 
 ### **1. Modello (Model)**
 
-Il file `models.py` definisce la struttura dei dati per **Note** e **Task**, utilizzando **SQLAlchemy**.
+Il file `models.py` definisce la struttura dei dati per **Note** e **Task**, utilizzando **SQLAlchemy**, inoltre si occupa della persistenza e della logica di business.
+
+Esempio con gli oggetti di tipo **Note**:
 
 ```python
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
-
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(512), nullable=False)
 
-class Todo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    task = db.Column(db.String(128), nullable=False)
-    is_done = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=db.func.now())
+    @staticmethod
+    def add(content):
+        if content:
+            new_note = Note(content=content)
+            db.session.add(new_note)
+            db.session.commit()
+
+    @staticmethod
+    def edit(note, new_content):
+        note.content = new_content
+        db.session.commit()
+
+    @staticmethod
+    def delete(id):
+        note = Note.query.get_or_404(id)
+        db.session.delete(note)
+        db.session.commit()
+
+    @staticmethod
+    def get(id):
+        return Note.query.get_or_404(id)
+
+    @staticmethod
+    def get_all():
+        return Note.query.all()
 ```
 
 ### **2. Controller (Controller)**
 
-Il file `controllers.py` contiene le rotte che gestiscono le interazioni con l'applicazione. Ad esempio:
+Il file `controllers.py` contiene le rotte che gestiscono le interazioni con l'applicazione, fungendo da intermediario tra View e Model. 
+
+Ad esempio:
 - **Aggiungere una nota**:
     ```python
     @main_blueprint.route('/add_note', methods=['POST'])
     def add_note():
         content = request.form.get('content')
-        if content:
-            new_note = Note(content=content)
-            db.session.add(new_note)
-            db.session.commit()
+        models.Note.add(content)
         return redirect(url_for('main.index'))
     ```
 
@@ -79,14 +96,22 @@ Il file `controllers.py` contiene le rotte che gestiscono le interazioni con l'a
     ```python
     @main_blueprint.route('/edit_note/<int:note_id>', methods=['GET', 'POST'])
     def edit_note(note_id):
-        note = Note.query.get_or_404(note_id)
+        note = models.Note.get(note_id)
         if request.method == 'POST':
+            print('Inside POST')
             new_content = request.form.get('content')
             if new_content:
-                note.content = new_content
-                db.session.commit()
+                models.Note.edit(note, new_content)
                 return redirect(url_for('main.index'))
         return render_template('edit_note.html', note=note)
+    ```
+
+- **Eliminare una nota**:
+    ```python
+    @main_blueprint.route('/delete_note/<int:note_id>', methods=['POST'])
+    def delete_note(note_id):
+        models.Note.delete(note_id)
+        return redirect(url_for('main.index'))
     ```
 
 ### **3. Vista (View)**
